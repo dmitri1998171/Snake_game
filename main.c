@@ -2,28 +2,44 @@
 #include <unistd.h>
 #include <string.h>
  
-#define WIDTH 80
-#define HEIGHT 13
+#define WIDTH 20
+#define HEIGHT 10
 
-int matrix[WIDTH][HEIGHT];
+char matrix[HEIGHT][WIDTH];
+/*char matrix[HEIGHT][WIDTH] =  {
+    "00000000000000000000",
+    "0                  0",
+    "0                  0",
+    "0                  0",
+    "0                  0",
+    "0                  0",
+    "0                  0",
+    "0                  0",
+    "0                  0",
+    "00000000000000000000"
+};*/
 
 void createMap() {
     for (int i = 0; i < HEIGHT; i++) {
-        for (int j = 0; j < WIDTH; j++) 
-            matrix[i][j] = 0;
+        for (int j = 0; j < WIDTH; j++) {
+            if(i == 0 || i == HEIGHT - 1 || j == 0 || j == WIDTH - 1)
+                matrix[i][j] = '0';
+            else
+                matrix[i][j] = ' ';
+        }
     }
 }
 
-int main(void)
-{
+int main(void) {
     createMap();
     
 /*
 */
     while(1) {
         for (int i = 0; i < HEIGHT; i++) {
-            for (int j = 0; j < WIDTH; j++) 
-                printf("%d", matrix[i][j]);
+            for (int j = 0; j < WIDTH; j++) {
+                printf("%c", matrix[i][j]);
+            }
             
             printf("\n");
         }
