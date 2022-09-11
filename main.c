@@ -1,5 +1,6 @@
 #include <stdio.h>
 #include <unistd.h>
+#include <stdlib.h>
 #include <string.h>
  
 #define WIDTH 20
@@ -40,6 +41,31 @@ void drawMap() {
     }
 }
 
+void getKeyInput() {
+    int key = getc(stdin);
+        
+        switch (key) {
+            case 119:   // w
+                
+                break;
+            
+            case 115:   // s
+
+                break;
+
+            case 97:    // a
+                
+                break;
+            
+            case 100:   // d
+            
+                break;
+
+            case 27:    // ESC
+                exit(0);
+        }
+}
+
 int main(void) {
     int snakeSize = 5;
     char snake[5] = {"00000"};
@@ -55,6 +81,7 @@ int main(void) {
             map[HEIGHT / 2][(WIDTH / 2) + i] = snake[i];
         }
         
+        getKeyInput();
         
         usleep(300);
 
