@@ -5,8 +5,8 @@
 #define WIDTH 20
 #define HEIGHT 10
 
-char matrix[HEIGHT][WIDTH];
-/*char matrix[HEIGHT][WIDTH] =  {
+char map[HEIGHT][WIDTH];
+/*char map[HEIGHT][WIDTH] =  {
     "00000000000000000000",
     "0                  0",
     "0                  0",
@@ -23,26 +23,38 @@ void createMap() {
     for (int i = 0; i < HEIGHT; i++) {
         for (int j = 0; j < WIDTH; j++) {
             if(i == 0 || i == HEIGHT - 1 || j == 0 || j == WIDTH - 1)
-                matrix[i][j] = '0';
+                map[i][j] = '#';
             else
-                matrix[i][j] = ' ';
+                map[i][j] = ' ';
         }
     }
 }
 
+void drawMap() {
+    for (int i = 0; i < HEIGHT; i++) {
+        for (int j = 0; j < WIDTH; j++) {
+            printf("%c", map[i][j]);
+        }
+        
+        printf("\n");
+    }
+}
+
 int main(void) {
+    int snakeSize = 5;
+    char snake[5] = {"00000"};
+
     createMap();
     
 /*
 */
     while(1) {
-        for (int i = 0; i < HEIGHT; i++) {
-            for (int j = 0; j < WIDTH; j++) {
-                printf("%c", matrix[i][j]);
-            }
-            
-            printf("\n");
+        drawMap();
+
+        for (int i = 0; i < snakeSize; i++) {
+            map[HEIGHT / 2][(WIDTH / 2) + i] = snake[i];
         }
+        
         
         usleep(300);
 
