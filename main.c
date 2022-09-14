@@ -8,6 +8,14 @@
 #define WIDTH 20
 #define HEIGHT 10
 
+struct point {
+    short x;
+    short y;
+};
+
+struct point dir;
+struct point curr_pos;
+
 short loop = 1;
 char map[HEIGHT][WIDTH];
 
@@ -46,19 +54,23 @@ void* getKeyInput(void *args) {
             
         switch (key) {
             case 119:   // w
-                printf(" world\n");
+                dir.y = -1;
+                //dir.x = 0;
                 break;
             
             case 115:   // s
-
+                dir.y = 1;
+                //dir.x = 0;
                 break;
 
             case 97:    // a
-                
+                //dir.y = 0;
+                dir.x = -1;
                 break;
             
             case 100:   // d
-            
+                //dir.y = 0;
+                dir.x = 1;
                 break;
 
             case 27:    // ESC
@@ -71,7 +83,16 @@ void* getKeyInput(void *args) {
 
 int main(void) {
     int snakeSize = 5;
-    char snake[5] = {"00000"};
+    //char snake[5] = {"00000"};
+    char coord_x[10], coord_y[10];
+    
+    dir.x = 1;
+    dir.y = 0;
+
+    curr_pos.x = 2;
+    curr_pos.y = 2;
+
+    int pos = 1;
 
     createMap();
     
@@ -82,13 +103,21 @@ int main(void) {
     status = pthread_create(&thread, NULL, getKeyInput, NULL);
 
     while(loop) {
-        drawMap();
+        pos++;
+        curr_pos.x = dir.x + pos;
+        curr_pos.y = dir.y + pos;
+        map[curr_pos.y][curr_pos.x] = ' ';
 
         for (int i = 0; i < snakeSize; i++) {
-            map[HEIGHT / 2][(WIDTH / 2) + i] = snake[i];
+            map[curr_pos.y + 1][curr_pos.x + 1] = '0';
+            curr_pos.x += dir.x;
+            curr_pos.y += dir.y;
         }
-        
-        usleep(300);
+
+        drawMap();
+
+        sleep(1);
+        //usleep(300);
 
         printf("\033[2J");      // Очистить терминал
         printf("\033[0;0f");    // Перевести каретку в левое верхнее положение
