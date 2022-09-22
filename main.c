@@ -13,11 +13,13 @@ struct point {
     short y;
 };
 
+
+short loop;
+short isNotEaten;
+int snakeSize;
 struct point dir;
 struct point curr_pos;
-
-short loop = 1;
-int snakeSize = 2;
+struct point apple_pos;
 char map[HEIGHT][WIDTH];
 char coord_x[2] = {"oo"};
 char coord_y[2] = {"oo"};
@@ -105,20 +107,41 @@ void moveSnake() {
     }
 }
 
+void generateApple() {
+    if(isNotEaten == 1) {
+        apple_pos.x = 1 + rand() % (WIDTH - 2);
+        apple_pos.y = 1 + rand() % (HEIGHT - 2);
+
+        if(map[apple_pos.y][apple_pos.x] != ' ')
+            generateApple();
+    
+        isNotEaten = 0;
+    }
+    else
+        map[apple_pos.y][apple_pos.x] = '*';
+}
+
 int main(void) {
+    printf("\033[2J");      // Очистить терминал
+    printf("\033[0;0f");    // Перевести каретку в левое верхнее положение
+    
     pthread_t thread;
     int status;
     int status_addr;
- 
-    status = pthread_create(&thread, NULL, getKeyInput, NULL);
-
+    srand(time(NULL));
+    loop = 1;
+    isNotEaten = 1;
+    snakeSize = 2;
     curr_pos.x = 5;
     curr_pos.y = 5;
     dir.x = 1;
     dir.y = 0;
+ 
+    status = pthread_create(&thread, NULL, getKeyInput, NULL);
 
     while(loop) {
         createMap();
+        generateApple();
         moveSnake();
         drawMap();
 
@@ -128,9 +151,6 @@ int main(void) {
         printf("\033[2J");      // Очистить терминал
         printf("\033[0;0f");    // Перевести каретку в левое верхнее положение
     }
-
-/*
-*/
 
     return 0;
 }
