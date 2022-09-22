@@ -16,6 +16,8 @@ struct point {
 
 short loop;
 short isNotEaten;
+int score;
+int lifes = 3;
 int snakeSize;
 struct point dir;
 struct point curr_pos;
@@ -111,25 +113,41 @@ void generateApple() {
     if(isNotEaten == 1) {
         apple_pos.x = 1 + rand() % (WIDTH - 2);
         apple_pos.y = 1 + rand() % (HEIGHT - 2);
-
-        if(map[apple_pos.y][apple_pos.x] != ' ')
-            generateApple();
     
         isNotEaten = 0;
     }
-    else
-        map[apple_pos.y][apple_pos.x] = '*';
+
+    map[apple_pos.y][apple_pos.x] = '*';
+}
+
+void checkCollision() {
+    if(curr_pos.x == apple_pos.x && curr_pos.y == apple_pos.y) {
+        score++;
+        isNotEaten = 1;
+    }
+
+    if(curr_pos.x == 0 || curr_pos.x == WIDTH - 1 || curr_pos.y == 0 || curr_pos.y == HEIGHT - 1)
+        lifes--;
+
+    if(lifes < 0) {
+        for (int i = 0; i < HEIGHT; i++)
+            memset(map[i], ' ', WIDTH);
+
+        strcpy(map[HEIGHT / 2], "\tGAME OVER");
+    }
 }
 
 int main(void) {
     printf("\033[2J");      // Очистить терминал
     printf("\033[0;0f");    // Перевести каретку в левое верхнее положение
+    srand(time(NULL));
     
     pthread_t thread;
     int status;
     int status_addr;
-    srand(time(NULL));
     loop = 1;
+    score = 0;
+    lifes = 3;
     isNotEaten = 1;
     snakeSize = 2;
     curr_pos.x = 5;
@@ -143,7 +161,10 @@ int main(void) {
         createMap();
         generateApple();
         moveSnake();
+        checkCollision();
         drawMap();
+        
+        printf("\nScore: %d  Lifes: %d\n", score, lifes);
 
         sleep(1);
         //usleep(300);
