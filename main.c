@@ -82,17 +82,7 @@ void* getKeyInput(void *args) {
 }
 
 int main(void) {
-    int snakeSize = 5;
-    //char snake[5] = {"00000"};
-    char coord_x[10], coord_y[10];
-    
-    dir.x = 1;
-    dir.y = 0;
-
-    curr_pos.x = 2;
-    curr_pos.y = 2;
-
-    int pos = 1;
+    int snakeSize = 2;
 
     createMap();
     
@@ -102,18 +92,25 @@ int main(void) {
  
     status = pthread_create(&thread, NULL, getKeyInput, NULL);
 
+    char coord_x[2] = {"00"};
+    char coord_y[5];
+
+    curr_pos.x = 5;
+    curr_pos.y = 5;
+    dir.x = 1;
+    dir.x = 0;
+
     while(loop) {
-        pos++;
-        curr_pos.x = dir.x + pos;
-        curr_pos.y = dir.y + pos;
-        map[curr_pos.y][curr_pos.x] = ' ';
+        map[5][curr_pos.x] = ' ';
+        curr_pos.x += dir.x;
 
         for (int i = 0; i < snakeSize; i++) {
-            map[curr_pos.y + 1][curr_pos.x + 1] = '0';
-            curr_pos.x += dir.x;
-            curr_pos.y += dir.y;
+            if(dir.x == 1)
+                map[5][curr_pos.x + i] = coord_x[i];
+            if(dir.x == -1)
+                map[5][curr_pos.x - i] = coord_x[i];
         }
-
+        
         drawMap();
 
         sleep(1);
