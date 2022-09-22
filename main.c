@@ -55,21 +55,21 @@ void* getKeyInput(void *args) {
         switch (key) {
             case 119:   // w
                 dir.y = -1;
-                //dir.x = 0;
+                dir.x = 0;
                 break;
             
             case 115:   // s
                 dir.y = 1;
-                //dir.x = 0;
+                dir.x = 0;
                 break;
 
             case 97:    // a
-                //dir.y = 0;
+                dir.y = 0;
                 dir.x = -1;
                 break;
             
             case 100:   // d
-                //dir.y = 0;
+                dir.y = 0;
                 dir.x = 1;
                 break;
 
@@ -93,22 +93,35 @@ int main(void) {
     status = pthread_create(&thread, NULL, getKeyInput, NULL);
 
     char coord_x[2] = {"00"};
-    char coord_y[5];
+    char coord_y[2] = {"00"};
 
     curr_pos.x = 5;
     curr_pos.y = 5;
-    dir.x = 1;
-    dir.x = 0;
+    // dir.x = 1;
+    // dir.y = 0;
 
     while(loop) {
-        map[5][curr_pos.x] = ' ';
-        curr_pos.x += dir.x;
+        if(dir.x != 0) {
+            map[curr_pos.y][curr_pos.x] = ' ';
+            curr_pos.x += dir.x;
+        }
+        if(dir.y != 0) {
+            map[curr_pos.y][curr_pos.x] = ' ';
+            curr_pos.y += dir.y;
+        }
 
         for (int i = 0; i < snakeSize; i++) {
             if(dir.x == 1)
                 map[5][curr_pos.x + i] = coord_x[i];
             if(dir.x == -1)
                 map[5][curr_pos.x - i] = coord_x[i];
+        }
+
+        for (int i = 0; i < snakeSize; i++) {
+            if(dir.y == 1)
+                map[curr_pos.y + i][curr_pos.x] = coord_y[i];
+            if(dir.y == -1)
+                map[curr_pos.y - i][curr_pos.x] = coord_y[i];
         }
         
         drawMap();
