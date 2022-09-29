@@ -13,18 +13,17 @@ struct point {
     short y;
 };
 
-
 short loop;
 short isNotEaten;
 int score;
-int lifes = 3;
+int lifes;
 int snakeSize;
 struct point dir;
 struct point curr_pos;
 struct point apple_pos;
 char map[HEIGHT][WIDTH];
-char coord_x[2] = {"oo"};
-char coord_y[2] = {"oo"};
+char *coord_x;
+char *coord_y;
 
 void createMap() {
     for (int i = 0; i < HEIGHT; i++) {
@@ -121,14 +120,24 @@ void generateApple() {
 }
 
 void checkCollision() {
+    // An apple was eaten
     if(curr_pos.x == apple_pos.x && curr_pos.y == apple_pos.y) {
         score++;
+        snakeSize++;
         isNotEaten = 1;
+
+        coord_x = (char*) realloc(coord_x, snakeSize * sizeof(char));
+        coord_x[snakeSize - 1] = 'o';
+        
+        coord_y = (char*) realloc(coord_y, snakeSize * sizeof(char));
+        coord_y[snakeSize - 1] = 'o';
     }
 
+    // Snake collide with itself or with walls
     if(curr_pos.x == 0 || curr_pos.x == WIDTH - 1 || curr_pos.y == 0 || curr_pos.y == HEIGHT - 1)
         lifes--;
 
+    // GAME OVER
     if(lifes < 0) {
         for (int i = 0; i < HEIGHT; i++)
             memset(map[i], ' ', WIDTH);
@@ -154,6 +163,13 @@ int main(void) {
     curr_pos.y = 5;
     dir.x = 1;
     dir.y = 0;
+
+    coord_x = (char*) malloc(2);
+    coord_y = (char*) malloc(2);
+
+    for (int i = 0; i < snakeSize; i++)
+        coord_x[i] = coord_y[i] = 'o';
+
  
     status = pthread_create(&thread, NULL, getKeyInput, NULL);
 
