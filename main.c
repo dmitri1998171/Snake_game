@@ -60,23 +60,31 @@ void* getKeyInput(void *args) {
             
         switch (key) {
             case 119:   // w
-                dir.y = -1;
-                dir.x = 0;
+                if (dir.y == 0) {
+                    dir.y = -1;
+                    dir.x = 0;
+                }
                 break;
             
             case 115:   // s
-                dir.y = 1;
-                dir.x = 0;
+                if (dir.y == 0) {
+                    dir.y = 1;
+                    dir.x = 0;
+                }
                 break;
 
             case 97:    // a
-                dir.y = 0;
-                dir.x = -1;
+                if (dir.x == 0) {
+                    dir.y = 0;
+                    dir.x = -1;
+                }
                 break;
             
             case 100:   // d
-                dir.y = 0;
-                dir.x = 1;
+                if (dir.x == 0) {
+                    dir.y = 0;
+                    dir.x = 1;
+                }
                 break;
 
             case 27:    // ESC
@@ -95,16 +103,16 @@ void moveSnake() {
 
     for (int i = 0; i < snakeSize; i++) {
         if(dir.x == 1)
-            map[curr_pos.y][curr_pos.x + i] = coord_x[i];
-        if(dir.x == -1)
             map[curr_pos.y][curr_pos.x - i] = coord_x[i];
+        if(dir.x == -1)
+            map[curr_pos.y][curr_pos.x + i] = coord_x[i];
     }
 
     for (int i = 0; i < snakeSize; i++) {
         if(dir.y == 1)
-            map[curr_pos.y + i][curr_pos.x] = coord_y[i];
-        if(dir.y == -1)
             map[curr_pos.y - i][curr_pos.x] = coord_y[i];
+        if(dir.y == -1)
+            map[curr_pos.y + i][curr_pos.x] = coord_y[i];
     }
 }
 
